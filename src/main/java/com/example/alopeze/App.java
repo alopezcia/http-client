@@ -4,6 +4,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -111,14 +112,17 @@ public class App {
 
         String result = "";
         HttpPost post = new HttpPost(url);
+        post.setHeader("Content-type", "application/json");
 
+        StringEntity postString = new StringEntity("{\"username\":\"xyz\",\"password\":\"20\"}");
+        post.setEntity(postString);
         // add request parameters or form parameters
-        List<NameValuePair> urlParameters = new ArrayList<>();
-        urlParameters.add(new BasicNameValuePair("username", username));
-        urlParameters.add(new BasicNameValuePair("password", password));
+        // List<NameValuePair> urlParameters = new ArrayList<>();
+        // urlParameters.add(new BasicNameValuePair("username", username));
+        // urlParameters.add(new BasicNameValuePair("password", password));
         // urlParameters.add(new BasicNameValuePair("custom", "secret"));
 
-        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        // post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(post)){
