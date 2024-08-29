@@ -10,6 +10,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +97,9 @@ public class App {
             try {
 //                String result = sendPOST("https://httpbin.org/post");
                 String result = sendPOST(url, safename, username, password );
-                System.out.println(result);
+                JsonObject obj = JsonParser.parseString(result).getAsJsonObject();
+                 // obj.getAsJsonObject("json").toString()
+                System.out.println(obj.getAsJsonObject("json").toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -113,8 +118,13 @@ public class App {
         String result = "";
         HttpPost post = new HttpPost(url);
         post.setHeader("Content-type", "application/json");
-
-        StringEntity postString = new StringEntity("{\"username\":\"xyz\",\"password\":\"20\"}");
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("{\"username\":\"");
+        sb.append(username);
+        sb.append("\",\"password\":\"");
+        sb.append(password);
+        sb.append("\"}");
+        StringEntity postString = new StringEntity(sb.toString());
         post.setEntity(postString);
         // add request parameters or form parameters
         // List<NameValuePair> urlParameters = new ArrayList<>();
